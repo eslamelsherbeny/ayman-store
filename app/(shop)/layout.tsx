@@ -12,6 +12,7 @@ export default function ShopLayout({
     <AuthProvider>
       <div className='min-h-screen flex flex-col'>
         <Navbar />
+        {/* القائمة الثابتة */}
         <main className='flex-1'>{children}</main>
         <Footer />
       </div>
