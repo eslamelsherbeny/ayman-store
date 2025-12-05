@@ -5,11 +5,12 @@ import { UploadCloud, X, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface ImageUploadProps {
-  value?: File | string | null // 👈 تعديل: يقبل رابط نصي أيضاً
+  value?: File | string | null
   onChange: (file: File | null) => void
   onRemove: () => void
   disabled?: boolean
-  onView: (imageUrl: string) => void
+  // 👇 التعديل هنا: ضفنا علامة الاستفهام (؟) عشان تبقى اختيارية
+  onView?: (imageUrl: string) => void
 }
 
 export default function ImageUpload({
@@ -27,13 +28,12 @@ export default function ImageUpload({
     }
   }
 
-  // 👈 تعديل: منطق عرض الصورة
   const imageUrl = useMemo(() => {
     if (typeof value === 'string') {
-      return value // إذا كان رابط مباشر (وضع التعديل)
+      return value
     }
     if (value && value instanceof File && value.type.startsWith('image/')) {
-      return URL.createObjectURL(value) // إذا كان ملف محلي (وضع الإضافة)
+      return URL.createObjectURL(value)
     }
     return null
   }, [value])
@@ -50,16 +50,22 @@ export default function ImageUpload({
       <div className='relative w-full flex items-center gap-4 p-2.5 border border-gray-200 rounded-lg bg-white shadow-sm hover:border-gray-300 transition-colors'>
         {imageUrl ? (
           <div
-            onClick={() => onView(imageUrl)}
-            className='relative w-16 h-16 rounded-md overflow-hidden shrink-0 cursor-pointer hover:opacity-80 transition-opacity'
-            title='Click to view image'
+            // 👇 التعديل هنا: نتأكد إن الدالة موجودة قبل ما نستدعيها
+            onClick={() => onView && onView(imageUrl)}
+            className={`relative w-16 h-16 rounded-md overflow-hidden shrink-0 transition-opacity ${
+              onView ? 'cursor-pointer hover:opacity-80' : ''
+            }`}
+            title={onView ? 'Click to view image' : ''}
           >
             <img
               src={imageUrl}
               alt='Selected file preview'
               className='w-full h-full object-cover'
             />
-            <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all'></div>
+            {/* إظهار تأثير الهوفر فقط لو فيه دالة عرض */}
+            {onView && (
+              <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all'></div>
+            )}
           </div>
         ) : (
           <div className='p-3 bg-blue-50 text-blue-600 rounded-md shrink-0'>
