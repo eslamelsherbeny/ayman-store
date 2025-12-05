@@ -1,13 +1,16 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // إضافة إعدادات الصور هنا
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  /* config options here */
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.pexels.com', // السماح بنطاق صور Pexels
-        port: '',
-        pathname: '/photos/**',
+        hostname: 'res.cloudinary.com', // السماح لصور Cloudinary
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com', // السماح لصور Pexels (عشان الصور الافتراضية)
       },
       {
         protocol: 'https',

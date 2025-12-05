@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image' // 1. استيراد مكون الصور
 import Autoplay from 'embla-carousel-autoplay'
 import { ArrowRight } from 'lucide-react'
 
@@ -13,100 +14,96 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
+import { useHeroSlides } from '@/hooks/useHeroSlides'
+import { Skeleton } from '@/components/ui/skeleton'
 
-const slides = [
+// بيانات افتراضية
+const FALLBACK_SLIDES = [
   {
-    id: 1,
+    id: 'default-1',
     image:
       'https://images.pexels.com/photos/6626903/pexels-photo-6626903.jpeg?auto=compress&cs=tinysrgb&w=1920',
-    title: 'Modest Elegance',
-    subtitle:
-      "Discover the finest collection of Abayas and Men's traditional wear.",
-    buttonText: 'Shop Women',
-    link: '/women',
-  },
-  {
-    id: 2,
-    image:
-      'https://images.pexels.com/photos/7244589/pexels-photo-7244589.jpeg?auto=compress&cs=tinysrgb&w=800',
-    title: "Traditional Men's Wear",
-    subtitle: 'Authentic Thobes and Kaftans crafted with perfection.',
-    buttonText: 'Shop Men',
-    link: '/men',
-  },
-  {
-    id: 3,
-    image:
-      'https://images.pexels.com/photos/4346403/pexels-photo-4346403.jpeg?auto=compress&cs=tinysrgb&w=1920',
-    title: 'Ramadan Essentials',
-    subtitle: 'Get ready for the holy month with our exclusive sets.',
-    buttonText: 'View Collection',
-    link: '/accessories',
+    title: 'أناقة عصرية',
+    subtitle: 'اكتشف أحدث صيحات الموضة لدينا بأفضل الأسعار.',
+    buttonText: 'تصفح المتجر',
+    link: '/shop',
   },
 ]
 
 export default function HeroSlider() {
   const plugin = React.useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: true })
+    Autoplay({ delay: 6000, stopOnInteraction: true })
   )
 
+  const { slides, isLoading } = useHeroSlides()
+  const activeSlides = slides.length > 0 ? slides : FALLBACK_SLIDES
+
+  if (isLoading) {
+    return (
+      <section className='w-full py-4'>
+        <div className='container mx-auto px-4 md:px-6'>
+          <div className='relative w-full h-[350px] md:h-[500px] overflow-hidden rounded-none md:rounded-lg'>
+            <Skeleton className='w-full h-full' />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
-    <section className='w-full py-4'>
-      {/* 1. المحاذاة: استخدام container لضبط العرض مع باقي الموقع */}
+    <section className='w-full py-4 animate-in fade-in duration-700'>
       <div className='container mx-auto px-4 md:px-6'>
         <Carousel
           plugins={[plugin.current]}
-          // 2. الحواف: إزالة rounded-xl ليكون حاداً ومسطرة
-          className='w-full overflow-hidden'
+          className='w-full overflow-hidden rounded-none md:rounded-lg shadow-2xl'
           opts={{
             loop: true,
             align: 'start',
           }}
         >
           <CarouselContent className='ml-0'>
-            {slides.map((slide) => (
+            {activeSlides.map((slide) => (
               <CarouselItem key={slide.id} className='pl-0'>
-                <div className='relative w-full h-[350px] md:h-[500px] overflow-hidden'>
-                  {/* الخلفية */}
-                  <div
-                    className='absolute inset-0 bg-cover bg-center'
-                    style={{ backgroundImage: `url(${slide.image})` }}
-                  >
-                    <div className='absolute inset-0 bg-black/40' />
-                  </div>
+                {/* هنا التحكم في ارتفاع السلايدر 
+                   h-[400px] للموبايل و md:h-[600px] للشاشات الكبيرة
+                   زودنا الارتفاع شوية عشان الصورة تاخد راحتها
+                */}
+                <div className='relative w-full h-[400px] md:h-[600px] group'>
+                  {/* 2. استخدام Next/Image بدلاً من الخلفية */}
+                  <Image
+                    src={slide.image}
+                    alt={slide.title}
+                    fill // تملأ الحاوية بالكامل
+                    priority // يحمل الصورة بسرعة لأنها في أول الشاشة
+                    className='object-cover object-top transition-transform duration-1000 group-hover:scale-105'
+                    // object-top: بيخلي الصورة تبدأ من فوق (عشان لو صورة شخص راسه متتقطعش)
+                    // object-cover: بيقص الزيادات عشان يملأ الشاشة
+                  />
+
+                  {/* طبقة تظليل */}
+                  <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent' />
 
                   {/* المحتوى */}
-                  <div className='relative z-10 h-full flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto'>
-                    <span className='inline-block py-1 px-3 rounded-full bg-white/10 backdrop-blur-sm text-white text-[10px] md:text-xs font-medium mb-3 uppercase tracking-widest border border-white/20'>
-                      New Collection 2025
+                  <div className='absolute inset-0 z-10 flex flex-col justify-center items-center text-center px-4 max-w-4xl mx-auto mt-8 md:mt-0'>
+                    <span className='inline-block py-1.5 px-4 rounded-full bg-primary/90 text-primary-foreground text-[10px] md:text-xs font-bold mb-4 uppercase tracking-widest shadow-lg animate-in slide-in-from-bottom-4 duration-500'>
+                      وصل حديثاً
                     </span>
 
-                    <h1 className='text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight'>
+                    <h1 className='text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-4 tracking-tight drop-shadow-lg leading-tight animate-in slide-in-from-bottom-5 duration-700 delay-100'>
                       {slide.title}
                     </h1>
 
-                    <p className='text-sm md:text-lg text-gray-200 mb-6 max-w-xl leading-relaxed hidden sm:block'>
+                    <p className='text-sm md:text-xl text-gray-100 mb-8 max-w-2xl leading-relaxed hidden sm:block drop-shadow-md animate-in slide-in-from-bottom-6 duration-700 delay-200'>
                       {slide.subtitle}
                     </p>
 
-                    <div className='flex flex-col sm:flex-row gap-3'>
+                    <div className='flex flex-col sm:flex-row gap-4 animate-in slide-in-from-bottom-8 duration-700 delay-300'>
                       <Button
                         asChild
-                        size='default'
-                        className='bg-white text-black hover:bg-gray-200 hover:text-black border-none text-sm h-10 px-6'
+                        size='lg'
+                        className='bg-white text-black hover:bg-white/90 border-none font-bold text-base h-12 px-8 rounded-full shadow-lg transition-all hover:scale-105'
                       >
                         <Link href={slide.link}>{slide.buttonText}</Link>
-                      </Button>
-
-                      <Button
-                        asChild
-                        variant='outline'
-                        size='default'
-                        className='bg-transparent text-white border-white hover:bg-white hover:text-black text-sm h-10 px-6'
-                      >
-                        <Link href='/sale'>
-                          Explore Offers <ArrowRight className='ml-2 h-4 w-4' />
-                        </Link>
                       </Button>
                     </div>
                   </div>
@@ -115,8 +112,8 @@ export default function HeroSlider() {
             ))}
           </CarouselContent>
 
-          <CarouselPrevious className='hidden md:flex left-4 bg-transparent border-white/50 text-white hover:bg-white hover:text-black hover:border-white h-10 w-10' />
-          <CarouselNext className='hidden md:flex right-4 bg-transparent border-white/50 text-white hover:bg-white hover:text-black hover:border-white h-10 w-10' />
+          <CarouselPrevious className='hidden lg:flex left-4 border-none bg-black/20 text-white hover:bg-black/50 hover:text-white h-12 w-12 rounded-full backdrop-blur-md' />
+          <CarouselNext className='hidden lg:flex right-4 border-none bg-black/20 text-white hover:bg-black/50 hover:text-white h-12 w-12 rounded-full backdrop-blur-md' />
         </Carousel>
       </div>
     </section>
