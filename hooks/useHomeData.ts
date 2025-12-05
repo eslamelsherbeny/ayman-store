@@ -65,6 +65,7 @@ export const useHomeData = () => {
         }
 
         // تطبيق الدالة وحفظ البيانات في الحالة
+        // البيانات الأعلى تقييماً
         setBestSellers(mapProducts(bestSellersRes))
         setTrendingProducts(mapProducts(trendingRes))
       } catch (error) {
