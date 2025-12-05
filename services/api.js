@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 // ⚠️ تأكد إن الرابط ده هو رابط الباك إند بتاعك
-const BASE_URL = 'http://localhost:8000/api/v1'
+// const BASE_URL = 'http://localhost:8000/api/v1'
+const BASE_URL = 'https://shopping-app-five-taupe.vercel.app/api/v1'
 
 const api = axios.create({
   baseURL: BASE_URL,
