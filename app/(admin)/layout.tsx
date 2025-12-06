@@ -1,7 +1,7 @@
 'use client'
-import React, { useState } from 'react' // 👈 استيراد useState
+import React, { useState } from 'react'
 import AdminSidebar from '@/components/admin/AdminSidebar'
-import AdminHeader from '@/components/admin/AdminHeader' // 👈 افتراض استيراد AdminHeader
+import AdminHeader from '@/components/admin/AdminHeader'
 
 export default function AdminLayout({
   children,
@@ -24,17 +24,16 @@ export default function AdminLayout({
         onClose={toggleMobileMenu}
       />
 
-      {/* المحتوى المتغير */}
+      {/* المحتوى المتغير (الرأس والمحتوى الرئيسي) */}
       <div className='flex-1 flex flex-col'>
         {/* 👈 الرأس (تمرير دالة الفتح) */}
-        {/* يُفترض أن AdminHeader الآن يستقبل خاصية onMenuClick */}
-        {/* (إذا كان AdminHeader لا يستقبل title، يرجى إزالة الخاصية) */}
+        {/* نمرر onMenuClick هنا لاستقبال أمر الفتح من زر القائمة */}
         <AdminHeader title='Dashboard' onMenuClick={toggleMobileMenu} />
 
         <main className='flex-1'>{children}</main>
       </div>
 
-      {/* 🛑 إذا كانت القائمة مفتوحة، نضع خلفية Overlay لإغلاقها بالضغط عليها */}
+      {/* 🛑 خلفية Overlay معتمة لإغلاق القائمة عند الضغط عليها (للهاتف فقط) */}
       {isMobileMenuOpen && (
         <div
           className='fixed inset-0 z-40 bg-black/50 lg:hidden'

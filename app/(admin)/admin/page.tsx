@@ -1,4 +1,4 @@
-import AdminHeader from '@/components/admin/AdminHeader'
+import AdminHeader from '@/components/admin/AdminHeader' // لم يعد مستخدماً في هذا الملف، لكن تم الاحتفاظ بالاستيراد مؤقتاً
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
@@ -15,7 +15,10 @@ import { DollarSign, Users, ShoppingBag, Activity } from 'lucide-react'
 export default function AdminDashboardPage() {
   return (
     <>
-      <AdminHeader title='Dashboard Overview' />
+      {/* 🛑 تم حذف استدعاء AdminHeader من هنا.
+          سيتم عرضه الآن بواسطة AdminLayout.tsx.
+      */}
+      {/* <AdminHeader title='Dashboard Overview' /> */}
 
       <main className='flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8'>
         {/* 1. Stats Cards Section */}
@@ -133,6 +136,7 @@ export default function AdminDashboardPage() {
                     <TableCell>
                       <div className='flex items-center gap-2'>
                         <Avatar className='h-8 w-8'>
+                          <AvatarImage src='/avatars/01.png' />
                           <AvatarFallback>AM</AvatarFallback>
                         </Avatar>
                         <div className='flex flex-col'>
@@ -165,6 +169,7 @@ export default function AdminDashboardPage() {
                     <TableCell>
                       <div className='flex items-center gap-2'>
                         <Avatar className='h-8 w-8'>
+                          <AvatarImage src='/avatars/01.png' />
                           <AvatarFallback>SK</AvatarFallback>
                         </Avatar>
                         <div className='flex flex-col'>
