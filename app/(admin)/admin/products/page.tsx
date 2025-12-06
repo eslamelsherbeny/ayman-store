@@ -40,7 +40,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle, // 👈 مستورد بشكل صحيح
 } from '@/components/ui/alert-dialog'
 import {
   Tooltip,
@@ -333,7 +333,9 @@ export default function AllProductsPage() {
                                     ? 'bg-amber-400'
                                     : 'bg-emerald-500'
                                 }`}
-                                style={{ width: `${Math.min(quantity, 100)}%` }}
+                                style={{
+                                  width: `${Math.min(quantity, 100)}%`,
+                                }}
                               />
                             </div>
                           )}
@@ -417,6 +419,7 @@ export default function AllProductsPage() {
               <AlertTriangle className='h-6 w-6 text-red-600 sm:h-5 sm:w-5' />
             </div>
             <div className='flex flex-col gap-1'>
+              {/* 🛑 هذا هو المكون المطلوب لـ Accessibility وتم التأكد من وجوده */}
               <AlertDialogTitle className='text-xl font-bold text-gray-900'>
                 Delete product
               </AlertDialogTitle>

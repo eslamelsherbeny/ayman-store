@@ -16,7 +16,8 @@ export default function CategoryGrid() {
           <div className='flex justify-between mb-8'>
             <Skeleton className='h-8 w-48' />
           </div>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+          {/* 👈 التعديل الأول: grid-cols-2 لعمودين في حالة التحميل */}
+          <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             {[1, 2, 3].map((i) => (
               <Skeleton key={i} className='w-full h-[300px] rounded-2xl' />
             ))}
@@ -43,7 +44,9 @@ export default function CategoryGrid() {
             <ArrowRight className='h-4 w-4 transition-transform group-hover:translate-x-1' />
           </Link>
         </div>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+
+        {/* 👈 التعديل الثاني: grid-cols-2 لعمودين في حالة العرض الفعلي */}
+        <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
           {categories.map((cat) => (
             <Link
               key={cat._id}
