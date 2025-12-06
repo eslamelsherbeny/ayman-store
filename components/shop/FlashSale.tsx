@@ -15,6 +15,29 @@ import { useFlashSale } from '@/hooks/useFlashSale'
 import ProductCard from './ProductCard'
 import { cn } from '@/lib/utils'
 
+// =======================
+// Component TimeBox خارجي
+// =======================
+const TimeBox = ({
+  val,
+  label,
+  isLast,
+}: {
+  val: string
+  label: string
+  isLast?: boolean
+}) => (
+  <div
+    className={cn(
+      'flex flex-col items-center justify-center w-9 h-9 md:w-11 md:h-11 bg-foreground text-background rounded-lg shadow-sm',
+      isLast && 'bg-red-600 text-white'
+    )}
+  >
+    <span className='font-bold text-sm md:text-lg leading-none'>{val}</span>
+    <span className='text-[8px] uppercase opacity-75 font-medium'>{label}</span>
+  </div>
+)
+
 export default function FlashSale() {
   const { products, isLoading, timeLeft } = useFlashSale()
 
@@ -45,19 +68,6 @@ export default function FlashSale() {
 
   const formatTime = (time: number | string) =>
     Number(time) < 10 ? `0${time}` : time.toString()
-
-  const TimeBox = ({ val, label, isLast }: any) => (
-    <div
-      className={`flex flex-col items-center justify-center w-9 h-9 md:w-11 md:h-11 bg-foreground text-background rounded-lg shadow-sm ${
-        isLast ? 'bg-red-600 text-white' : ''
-      }`}
-    >
-      <span className='font-bold text-sm md:text-lg leading-none'>{val}</span>
-      <span className='text-[8px] uppercase opacity-75 font-medium'>
-        {label}
-      </span>
-    </div>
-  )
 
   return (
     <section
@@ -118,7 +128,7 @@ export default function FlashSale() {
                 <ProductCard
                   id={product.id}
                   title={product.title}
-                  slug={product.slug} // ✅ تمرير slug هنا مهم
+                  slug={product.slug}
                   price={product.price}
                   oldPrice={product.oldPrice}
                   image={product.image}
