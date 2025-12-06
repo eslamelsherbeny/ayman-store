@@ -86,7 +86,8 @@ export default function Navbar() {
   ]
 
   return (
-    <header className='sticky top-0 z-50 w-full border-b bg-background shadow-md bg-white'>
+    // 🛑 تم إضافة overflow-x-hidden هنا احتياطياً
+    <header className='sticky top-0 z-50 w-full border-b bg-background shadow-md bg-white overflow-x-hidden'>
       {/* شريط الشحن العلوي */}
       <div className='w-full bg-black text-white text-[11px] font-medium py-2'>
         <div className='container mx-auto px-4 md:px-8 flex justify-between items-center h-full'>
@@ -106,99 +107,104 @@ export default function Navbar() {
       </div>
 
       {/* الرأس الرئيسي */}
-      <div className='container mx-auto px-4 md:px-8 h-24 flex items-center justify-between gap-8'>
-        {/* زر القائمة الجانبية (Mobile Menu Button) */}
-        <Sheet>
-          <SheetTrigger
-            className={cn(
-              buttonVariants({ variant: 'ghost', size: 'icon' }),
-              'lg:hidden'
-            )}
-          >
-            <Menu className='h-7 w-7' />
-          </SheetTrigger>
-          <SheetContent side='left' className='w-[300px]'>
-            <SheetHeader className='mb-6 text-left'>
-              <BrandLogo />
-            </SheetHeader>
-            <div className='flex flex-col gap-6'>
-              <nav className='flex flex-col gap-1'>
-                {mainLinks.map((link) => (
-                  <SheetClose key={link.title} asChild>
-                    <Link
-                      href={link.href}
-                      className='text-lg font-semibold p-3 hover:bg-slate-100 rounded-lg flex justify-between items-center'
-                    >
-                      {link.title}
-                      {link.isNew && (
-                        <Badge
-                          variant='destructive'
-                          className='text-[10px] h-5 px-1.5'
-                        >
-                          NEW
-                        </Badge>
-                      )}
-                    </Link>
-                  </SheetClose>
-                ))}
-                <Separator className='my-4' />
-                {categories.map((cat) => (
-                  <SheetClose key={cat.name} asChild>
-                    <Link
-                      href={cat.href}
-                      className='text-base font-medium p-3 hover:text-primary transition-colors block'
-                    >
-                      {cat.name}
-                    </Link>
-                  </SheetClose>
-                ))}
-
-                {/* Mobile Auth (في ذيل القائمة) */}
-                <div className='mt-4 pt-4 border-t'>
-                  {!isLoggedIn ? (
-                    <Link
-                      href='/login'
-                      className={cn(
-                        buttonVariants({ variant: 'default' }),
-                        'w-full'
-                      )}
-                    >
-                      Login / Register
-                    </Link>
-                  ) : (
-                    <div className='flex flex-col gap-2'>
-                      <p className='text-sm font-medium px-2'>
-                        Hi, {user.name}
-                      </p>
-                      {isAdmin && (
-                        <Link
-                          href='/admin'
-                          className='flex items-center gap-2 px-2 py-2 text-sm hover:bg-slate-100 rounded-md'
-                        >
-                          <LayoutDashboard className='h-4 w-4' /> Admin
-                          Dashboard
-                        </Link>
-                      )}
-                      <button
-                        onClick={logoutContext}
-                        className='flex items-center gap-2 px-2 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md text-left'
+      {/* 🛑 التعديل 1: استخدام justify-between وتوحيد حجم الحاوية (h-20) */}
+      <div className='container mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-4'>
+        {/* المجموعة اليسرى: زر القائمة الجانبية (Mobile Menu Button) واللوجو */}
+        <div className='flex items-center gap-2 flex-shrink-0'>
+          <Sheet>
+            <SheetTrigger
+              className={cn(
+                buttonVariants({ variant: 'ghost', size: 'icon' }),
+                'lg:hidden h-10 w-10'
+              )}
+            >
+              <Menu className='h-6 w-6' />
+            </SheetTrigger>
+            <SheetContent side='left' className='w-[300px]'>
+              <SheetHeader className='mb-6 text-left'>
+                <BrandLogo />
+              </SheetHeader>
+              <div className='flex flex-col gap-6'>
+                <nav className='flex flex-col gap-1'>
+                  {mainLinks.map((link) => (
+                    <SheetClose key={link.title} asChild>
+                      <Link
+                        href={link.href}
+                        className='text-lg font-semibold p-3 hover:bg-slate-100 rounded-lg flex justify-between items-center'
                       >
-                        <LogOut className='h-4 w-4' /> Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </nav>
-            </div>
-          </SheetContent>
-        </Sheet>
+                        {link.title}
+                        {link.isNew && (
+                          <Badge
+                            variant='destructive'
+                            className='text-[10px] h-5 px-1.5'
+                          >
+                            NEW
+                          </Badge>
+                        )}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                  <Separator className='my-4' />
+                  {categories.map((cat) => (
+                    <SheetClose key={cat.name} asChild>
+                      <Link
+                        href={cat.href}
+                        className='text-base font-medium p-3 hover:text-primary transition-colors block'
+                      >
+                        {cat.name}
+                      </Link>
+                    </SheetClose>
+                  ))}
 
-        <Link href='/' className='flex-shrink-0'>
-          <BrandLogo />
-        </Link>
+                  {/* Mobile Auth (في ذيل القائمة) */}
+                  <div className='mt-4 pt-4 border-t'>
+                    {!isLoggedIn ? (
+                      <Link
+                        href='/login'
+                        className={cn(
+                          buttonVariants({ variant: 'default' }),
+                          'w-full'
+                        )}
+                      >
+                        Login / Register
+                      </Link>
+                    ) : (
+                      <div className='flex flex-col gap-2'>
+                        <p className='text-sm font-medium px-2'>
+                          Hi, {user.name}
+                        </p>
+                        {isAdmin && (
+                          <Link
+                            href='/admin'
+                            className='flex items-center gap-2 px-2 py-2 text-sm hover:bg-slate-100 rounded-md'
+                          >
+                            <LayoutDashboard className='h-4 w-4' /> Admin
+                            Dashboard
+                          </Link>
+                        )}
+                        <button
+                          onClick={logoutContext}
+                          className='flex items-center gap-2 px-2 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md text-left'
+                        >
+                          <LogOut className='h-4 w-4' /> Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </nav>
+              </div>
+            </SheetContent>
+          </Sheet>
 
-        {/* 🛑 التعديل: تغيير lg:flex إلى md:flex لإظهار الروابط على التابلت */}
-        <nav className='hidden md:flex items-center gap-10 flex-1 justify-center'>
+          <Link href='/' className='flex-shrink-0'>
+            <BrandLogo />
+          </Link>
+        </div>
+
+        {/* روابط الكمبيوتر */}
+        <nav className='hidden lg:flex items-center gap-10'>
+          {' '}
+          {/* 🛑 التعديل: lg:flex للعرض الأكبر فقط */}
           {mainLinks.map((link) => (
             <Link
               key={link.title}
@@ -215,8 +221,8 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* أيقونات الإجراءات (اليمين) */}
-        <div className='flex items-center gap-2 sm:gap-4'>
+        {/* 🛑 التعديل 2: تجميع أيقونات الإجراءات (اليمين) */}
+        <div className='flex items-center gap-1 sm:gap-2 flex-shrink-0'>
           <div className='hidden xl:flex relative w-[200px]'>
             <Input
               type='search'
@@ -226,19 +232,19 @@ export default function Navbar() {
             <Search className='absolute right-3 top-2.5 h-4 w-4 text-muted-foreground' />
           </div>
 
-          <div className='flex items-center gap-1 sm:gap-2'>
+          <div className='flex items-center gap-1'>
             <Button
               variant='ghost'
               size='icon'
-              className='hidden sm:flex rounded-full'
+              className='hidden sm:flex rounded-full h-10 w-10'
             >
-              <Heart className='h-5 w-5' />
+              <Heart className='h-6 w-6' />
             </Button>
 
             <Button
               variant='ghost'
               size='icon'
-              className='relative rounded-full'
+              className='relative rounded-full h-10 w-10'
               asChild
             >
               <Link href='/cart'>
@@ -251,20 +257,30 @@ export default function Navbar() {
             {mounted && !isLoggedIn ? (
               <Button
                 variant='ghost'
-                size='sm'
-                // 🛑 التعديل: إزالة 'hidden sm:flex' لجعل أيقونة المستخدم مرئية على الهاتف
-                className='flex items-center gap-2 font-bold'
+                size='icon' // 🛑 تم التعديل إلى size='icon'
+                className='flex items-center gap-2 font-bold h-10 w-10'
                 asChild
               >
                 <Link href='/login'>
-                  <User className='h-5 w-5' />
-                  <span className='hidden sm:inline'>Login</span>
+                  <User className='h-6 w-6' />
+                  {/* <span className='hidden sm:inline'>Login</span> 🛑 تم إزالة النص على الهاتف */}
                 </Link>
               </Button>
             ) : (
               mounted && (
                 <DropdownMenu>
-                  {/* ... User Dropdown Content ... */}
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='rounded-full h-10 w-10'
+                    >
+                      <User className='h-6 w-6' />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align='end'>
+                    {/* ... (محتوى Dropdown) ... */}
+                  </DropdownMenuContent>
                 </DropdownMenu>
               )
             )}
