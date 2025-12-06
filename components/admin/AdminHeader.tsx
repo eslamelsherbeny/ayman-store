@@ -8,27 +8,36 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Bell, Menu, Plus, Store } from 'lucide-react' // استيراد Menu و Plus و Store
-import Link from 'next/link' // استيراد Link
+import { Bell, Menu, Plus, Store } from 'lucide-react'
+import Link from 'next/link'
 
-export default function AdminHeader({ title }: { title: string }) {
+// 🛑 التعديل: إضافة الخاصية onMenuClick
+export default function AdminHeader({
+  title,
+  onMenuClick,
+}: {
+  title: string
+  onMenuClick: () => void
+}) {
   return (
     // 🛑 التعديل 1: إضافة sticky, top-0, z-20, و shadow-lg
     <header className='sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-white px-4 md:px-6 shadow-lg'>
-      {/* 1. زر القائمة (Hamburger Menu) - يظهر فقط على الشاشات الصغيرة */}
-      {/* ⚠️ ملاحظة: هذا الزر يحتاج إلى لوجيك خارجي لفتح Mobile Sidebar */}
-      <Button variant='ghost' size='icon' className='lg:hidden'>
+      {/* 🛑 التعديل 2: زر القائمة - يظهر فقط على الشاشات الصغيرة مع دالة onClick */}
+      <Button
+        variant='ghost'
+        size='icon'
+        className='lg:hidden'
+        onClick={onMenuClick}
+      >
         <Menu className='h-5 w-5 text-gray-700' />
       </Button>
 
-      {/* العنوان */}
       <h1 className='text-lg font-bold tracking-tight text-gray-900 md:text-xl md:ml-0 ml-4'>
         {title}
       </h1>
 
-      {/* 2. حاوية الإجراءات (Actions) */}
       <div className='flex items-center gap-3'>
-        {/* 🛑 التعديل 2: زر إضافة المنتج - مهم جداً على الهاتف */}
+        {/* 🛑 التعديل 3: زر إضافة المنتج */}
         <Link href='/admin/products/add'>
           <Button
             size='icon'
@@ -38,7 +47,7 @@ export default function AdminHeader({ title }: { title: string }) {
           </Button>
         </Link>
 
-        {/* زر العودة للمتجر (مفيد في لوحة التحكم) */}
+        {/* زر العودة للمتجر */}
         <Link href='/' target='_blank'>
           <Button variant='ghost' size='icon' className='h-9 w-9'>
             <Store className='h-5 w-5 text-gray-500 hover:text-blue-600 transition-colors' />
@@ -54,7 +63,6 @@ export default function AdminHeader({ title }: { title: string }) {
         {/* قائمة المستخدم */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            {/* تم توحيد حجم زر القائمة إلى h-9 w-9 */}
             <Button variant='ghost' className='relative h-9 w-9 rounded-full'>
               <Avatar className='h-8 w-8'>
                 <AvatarImage
